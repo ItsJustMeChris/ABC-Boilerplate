@@ -1,5 +1,7 @@
 import { Application } from "https://deno.land/x/abc@v1.0.3/mod.ts";
 import { Database } from 'https://deno.land/x/denodb/mod.ts';
+// import "https://deno.land/x/dotenv/load.ts";
+// https://github.com/vlucas/phpdotenv/issues/76#issuecomment-87252126 | Use a service...
 
 import routes from "./routes/index.ts";
 import models from "./models/index.ts";
@@ -12,10 +14,10 @@ const productionMode: boolean = Boolean(Deno.env.get('production'));
 
 if (productionMode) {
     // ENV
-    const port: number = Number(Deno.env.get('port'));
-    const certFile: string = Deno.env.get('cert') || '';
-    const keyFile: string = Deno.env.get('key') || '';
-    const hostname: string = Deno.env.get('hostname') || '';
+    const port: number = Number(Deno.env.get('SERVER_PORT'));
+    const certFile: string = Deno.env.get('SSL_CERT') || '';
+    const keyFile: string = Deno.env.get('SSL_KEY') || '';
+    const hostname: string = Deno.env.get('SERVER_HOSTNAME') || '';
 
     const DB_HOST: string = Deno.env.get('DB_HOST') || '';
     const DB_NAME: string = Deno.env.get('DB_NAME') || '';
