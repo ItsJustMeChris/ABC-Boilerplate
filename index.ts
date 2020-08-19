@@ -1,10 +1,10 @@
-import { Application } from "https://deno.land/x/abc@v1.0.3/mod.ts";
+import { Application } from 'https://deno.land/x/abc@v1.0.3/mod.ts';
 import { Database } from 'https://deno.land/x/denodb/mod.ts';
-// import "https://deno.land/x/dotenv/load.ts";
+// import 'https://deno.land/x/dotenv/load.ts';
 // https://github.com/vlucas/phpdotenv/issues/76#issuecomment-87252126 | Use a service...
 
-import routes from "./routes/index.ts";
-import models from "./models/index.ts";
+import routes from './routes/index.ts';
+import models from './models/index.ts';
 
 const app: Application = new Application();
 
