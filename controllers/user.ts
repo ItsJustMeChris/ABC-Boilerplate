@@ -3,6 +3,8 @@ import * as bcrypt from 'https://deno.land/x/bcrypt/mod.ts';
 
 import { User } from '../models/user.ts';
 
+import { tryMake } from '../helpers/jwt.ts';
+
 import createStatus from '../helpers/status.ts';
 import UserInterface from '../interfaces/user.ts';
 import StatusInterface from '../interfaces/status.ts';
@@ -50,8 +52,8 @@ const login = async (context: Context): Promise<StatusInterface> => {
         const valid: boolean = await bcrypt.compare(password, fromDB);
 
         if (!valid) return createStatus({ status: 'error', message: 'Password is invalid' });
-
-        return createStatus({ status: 'success', message: 'Logged In' });
+        const jwt = await tryMake({ user: 'test' });
+        return createStatus({ status: 'success', message: 'Logged In', payload: jwt });
     } catch (error) {
         return createStatus({ status: 'error', message: 'Username or password is invalid' });
     }
