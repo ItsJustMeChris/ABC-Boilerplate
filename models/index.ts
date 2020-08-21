@@ -1,7 +1,20 @@
 import { Database } from 'https://deno.land/x/denodb/mod.ts';
 
-import { User } from './user.ts';
+import User from './user.ts';
+import RenewKey from './renew-key.ts';
 
-export default (db: Database): void => {
-    db.link([User]);
+const db: Database = new Database('postgres', {
+    host: 'localhost',
+    username: 'dev',
+    password: 'dev',
+    database: 'cntnt',
+});
+
+db.link([User, RenewKey]);
+
+// await db.sync({ drop: false });
+
+export {
+    User,
+    RenewKey
 }
