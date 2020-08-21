@@ -11,7 +11,7 @@ const renew = async (context: Context): Promise<StatusInterface> => {
     try {
         const { renewKey = '' } = await context.body();
 
-        if (!renewKey) return createStatus({ status: 'error', message: 'A' });
+        if (!renewKey) return createStatus({ status: 'error', message: 'Error Renewing Token' });
 
         const key: RenewKeyInterface = await RenewKey.where('key', renewKey).first();
         const renewKeyUser: UserInterface = await RenewKey.where('id', key.id).user();
@@ -19,13 +19,13 @@ const renew = async (context: Context): Promise<StatusInterface> => {
         const ip: Deno.NetAddr = <Deno.NetAddr>context.request.conn.remoteAddr
 
         if (key.ip !== String(ip.hostname)) {
-            return createStatus({ status: 'error', message: 'V' });
+            return createStatus({ status: 'error', message: 'Error Renewing Token' });
         }
 
         const jwt = await tryMake(renewKeyUser);
         return createStatus({ status: 'success', message: 'Renewed JWT', payload: jwt });
     } catch (error) {
-        return createStatus({ status: 'error', message: 'C' });
+        return createStatus({ status: 'error', message: 'Error Renewing Token' });
     }
 }
 
