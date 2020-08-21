@@ -1,12 +1,17 @@
 import { DataTypes, Model } from 'https://deno.land/x/denodb/mod.ts';
+import { RenewKey } from '../models/index.ts';
 
-export class User extends Model {
-  static table: string = 'users';
-  static timestamps: boolean = true;
+export default class User extends Model {
+    static table: string = 'users';
+    static timestamps: boolean = true;
 
-  static fields: any = {
-    id: { primaryKey: true, autoIncrement: true },
-    name: { unique: true, type: DataTypes.STRING, allowNull: false },
-    password: { type: DataTypes.STRING, allowNull: false }
-  };
+    static fields: any = {
+        id: { primaryKey: true, autoIncrement: true, type: DataTypes.INTEGER },
+        name: { unique: true, type: DataTypes.STRING, allowNull: false },
+        password: { type: DataTypes.STRING, allowNull: false }
+    };
+
+    static renewKeys() {
+        return this.hasMany(RenewKey);
+    }
 };

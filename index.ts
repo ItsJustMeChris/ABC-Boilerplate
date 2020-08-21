@@ -4,7 +4,7 @@ import { Database } from 'https://deno.land/x/denodb/mod.ts';
 // https://github.com/vlucas/phpdotenv/issues/76#issuecomment-87252126 | Use a service...
 
 import routes from './routes/index.ts';
-import models from './models/index.ts';
+// import models from './models/index.ts';
 
 const app: Application = new Application();
 
@@ -33,20 +33,10 @@ if (productionMode) {
         port: DB_PORT
     });
 
-    models(db);
-    db.sync({ drop: true });
+    // models(db);
+    // db.sync({ drop: true });
 
     app.startTLS({ port, certFile, keyFile, hostname })
 } else {
-    const db: Database = new Database('postgres', {
-        host: 'localhost',
-        username: 'dev',
-        password: 'dev',
-        database: 'cntnt',
-    });
-
-    models(db);
-    db.sync({ drop: true });
-
     app.start({ port: 8080 });
 }

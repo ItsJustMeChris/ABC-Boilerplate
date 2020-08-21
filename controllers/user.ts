@@ -1,13 +1,14 @@
 import type { Context } from 'https://deno.land/x/abc@v1.0.3/mod.ts';
 import * as bcrypt from 'https://deno.land/x/bcrypt/mod.ts';
 
-import { User } from '../models/user.ts';
+import { User, RenewKey } from '../models/index.ts';
 
 import { tryMake } from '../helpers/jwt.ts';
 
 import createStatus from '../helpers/status.ts';
 import UserInterface from '../interfaces/user.ts';
 import StatusInterface from '../interfaces/status.ts';
+import RenewKeyInterface from '../interfaces/renew-key.ts';
 
 const get = async (context: Context): Promise<UserInterface | StatusInterface> => {
     try {
@@ -26,7 +27,6 @@ const get = async (context: Context): Promise<UserInterface | StatusInterface> =
 const create = async (context: Context): Promise<UserInterface | StatusInterface> => {
     try {
         const { name = '', password = '' }: UserInterface = await context.body();
-
         if (!name || !password) return createStatus({ status: 'error', message: 'Username or password is missing' });
 
         const hashed = await bcrypt.hash(password);
@@ -36,7 +36,12 @@ const create = async (context: Context): Promise<UserInterface | StatusInterface
             password: hashed,
         });
 
-        return user;
+        const ip: Deno.NetAddr = <Deno.NetAddr>context.request.conn.remoteAddr
+
+        const renewKey: RenewKeyInterface = await RenewKey.create({ key: '0ghgh90g24h023', ip: ip.hostname, userId: Number(user.id) })
+        const jwt = await tryMake({ user: { name: user.name, id: user.id } });
+
+        return createStatus({ status: 'success', message: 'Created User', payload: { jwt, renewKey } });
     } catch (error) {
         return createStatus({ status: 'error', message: 'Username already taken' });
     }
@@ -48,12 +53,18 @@ const login = async (context: Context): Promise<StatusInterface> => {
 
         if (!name || !password) return createStatus({ status: 'error', message: 'Username or password is missing' });
 
-        const { password: fromDB = '' }: UserInterface = await User.where({ name }).select('password').first();
-        const valid: boolean = await bcrypt.compare(password, fromDB);
+        const user: UserInterface = await User.where({ name }).select('name', 'id').first();
+        const valid: boolean = await bcrypt.compare(password, String(user.password));
 
         if (!valid) return createStatus({ status: 'error', message: 'Password is invalid' });
-        const jwt = await tryMake({ user: 'test' });
-        return createStatus({ status: 'success', message: 'Logged In', payload: jwt });
+
+        const ip: Deno.NetAddr = <Deno.NetAddr>context.request.conn.remoteAddr
+
+
+        const jwt = await tryMake({ user });
+        const renewKey: RenewKeyInterface = await RenewKey.create({ key: '0ghgh90g24h023', ip: ip.hostname, userId: Number(user.id) })
+
+        return createStatus({ status: 'success', message: 'Logged In', payload: { jwt, renewKey } });
     } catch (error) {
         return createStatus({ status: 'error', message: 'Username or password is invalid' });
     }
