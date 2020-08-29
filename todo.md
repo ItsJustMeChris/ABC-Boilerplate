@@ -8,7 +8,3 @@ Tokens
 PBAC/RBAC
     Implement a middleware for handling requests
     Implement a database layer tied to a user
-
-Env/DB
-    Fix environment loading for database authentication
-        - Moved from index.ts to `models/index.ts`
