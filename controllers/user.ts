@@ -38,8 +38,10 @@ const create = async (context: Context): Promise<UserInterface | StatusInterface
 
         const ip: Deno.NetAddr = <Deno.NetAddr>context.request.conn.remoteAddr
 
-        const renewKey: RenewKeyInterface = await RenewKey.create({ key: '0ghgh90g24h023', ip: ip.hostname, userId: Number(user.id) })
         const jwt = await tryMake({ user: { name: user.name, id: user.id } });
+        const renewJWT = await tryMake({ user: { id: user.id, name: user.name } }, 60 * 60 * 24 * 31);
+
+        const renewKey: RenewKeyInterface = await RenewKey.create({ key: renewJWT, ip: ip.hostname, userId: Number(user.id) })
 
         return createStatus({ status: 'success', message: 'Created User', payload: { jwt, renewKey } });
     } catch (error) {
@@ -53,16 +55,17 @@ const login = async (context: Context): Promise<StatusInterface> => {
 
         if (!name || !password) return createStatus({ status: 'error', message: 'Username or password is missing' });
 
-        const user: UserInterface = await User.where({ name }).select('name', 'id').first();
+        const user: UserInterface = await User.where({ name }).first();
         const valid: boolean = await bcrypt.compare(password, String(user.password));
-
         if (!valid) return createStatus({ status: 'error', message: 'Password is invalid' });
 
         const ip: Deno.NetAddr = <Deno.NetAddr>context.request.conn.remoteAddr
 
 
-        const jwt = await tryMake({ user });
-        const renewKey: RenewKeyInterface = await RenewKey.create({ key: '0ghgh90g24h023', ip: ip.hostname, userId: Number(user.id) })
+        const jwt = await tryMake({ user: { id: user.id, name: user.name } });
+        const renewJWT = await tryMake({ user: { id: user.id, name: user.name } }, 60 * 60 * 24 * 31);
+
+        const renewKey: RenewKeyInterface = await RenewKey.create({ key: renewJWT, ip: ip.hostname, userId: Number(user.id) })
 
         return createStatus({ status: 'success', message: 'Logged In', payload: { jwt, renewKey } });
     } catch (error) {

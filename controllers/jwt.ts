@@ -22,7 +22,7 @@ const renew = async (context: Context): Promise<StatusInterface> => {
             return createStatus({ status: 'error', message: 'Error Renewing Token' });
         }
 
-        const jwt = await tryMake(renewKeyUser);
+        const jwt = await tryMake({ user: { id: renewKeyUser.id, name: renewKeyUser.name } }, 60 * 60 * 24 * 31);
         return createStatus({ status: 'success', message: 'Renewed JWT', payload: jwt });
     } catch (error) {
         return createStatus({ status: 'error', message: 'Error Renewing Token' });
