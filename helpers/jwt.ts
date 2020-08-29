@@ -8,7 +8,11 @@ const header: Jose = {
     typ: "JWT",
 };
 
-const secret = "0iwgi0j3g9024gh034gh0g34h0g34h0g34j0g34j0vrnvnovsji0hfwj02fgh0g3noirb3nog4j0fwoinvd";
+const secret: string | undefined = Deno.env.get('JWT_SECRET') || undefined;
+
+if (!secret) {
+    throw new Error("JWT Secret not set");
+}
 
 const tryValidate = async (token: string) => {
     const jwt: JwtValidation = await validateJwt({ jwt: token, key: secret, algorithm: "HS256" });
