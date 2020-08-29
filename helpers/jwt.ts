@@ -22,8 +22,8 @@ const tryValidate = async (token: string) => {
     }
 };
 
-const tryMake = async (data: any) => {
-    const payload: Payload = { ...data, exp: setExpiration(60 * 5) };
+const tryMake = async (data: any, exp: number = 300) => {
+    const payload: Payload = { ...data, exp: setExpiration(exp) };
     const jwt = await makeJwt({ header, payload, key: secret });
 
     return jwt;
