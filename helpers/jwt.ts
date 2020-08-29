@@ -18,7 +18,7 @@ const tryValidate = async (token: string) => {
     const jwt: JwtValidation = await validateJwt({ jwt: token, key: secret, algorithm: "HS256" });
     if (!jwt.isValid) {
         if (jwt.isExpired) {
-            throw new HttpException("Login Time-out", 440);
+            throw new HttpException("Login Time-out", Status.Forbidden);
         }
         throw new HttpException("Forbidden", Status.Forbidden);
     } else {
