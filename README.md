@@ -1,7 +1,8 @@
 # ABC-Boilerplate
 Boilerplate for Deno ABC
 
-deno run --allow-net --unstable --allow-env index.ts
+deno run --allow-net --unstable --allow-env --allow-read index.ts
+
 
 Features: 
 
