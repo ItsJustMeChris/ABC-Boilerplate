@@ -1,4 +1,6 @@
 # ABC-Boilerplate
+!! This is currently not working due to some deno changes in the way `import` works in type script, it will be updated eventually to support whatever Deno decides, but since we need `unstable` to use some features, this cannot be updated until Deno decides if this feature goes to production and the other libraries update !!
+
 Boilerplate for Deno ABC
 
 deno run --allow-net --unstable --allow-env --allow-read index.ts
