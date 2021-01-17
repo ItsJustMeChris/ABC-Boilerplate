@@ -1,14 +1,18 @@
-import { Context } from "https://deno.land/x/abc@v1.0.3/context.ts";
-import { HandlerFunc } from "https://deno.land/x/abc@v1.0.3/types.ts";
+import { Context } from "https://deno.land/x/abc/context.ts";
+import { HandlerFunc } from "https://deno.land/x/abc/types.ts";
 
 import { tryValidate } from '../helpers/jwt.ts';
-import { HttpException } from "https://deno.land/x/abc@v1.0.3/http_exception.ts";
-import { Status } from "https://deno.land/std@0.65.0/http/http_status.ts";
+import { HttpException } from "https://deno.land/x/abc/http_exception.ts";
+import { Status } from "https://deno.land/std/http/http_status.ts";
+
+interface TokenBody {
+    token: string;
+}
 
 export default (next: HandlerFunc): HandlerFunc => async (context: Context) => {
-    const { token } = context.params;
+    const { token } = await context.params;
     if (!token) {
-        const { token } = await context.body();
+        const { token } = await context.body as TokenBody;
         if (!token) {
             const { token } = context.queryParams;
             const payload = await tryValidate(token);

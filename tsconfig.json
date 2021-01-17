@@ -3,6 +3,8 @@
       "allowJs": true,
       "baseUrl": ".",
       "esModuleInterop": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,  
       "lib": ["esnext"],
       "module": "esnext",
       "moduleResolution": "node",

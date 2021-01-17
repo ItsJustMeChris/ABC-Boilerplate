@@ -1,4 +1,4 @@
-import type { Group } from 'https://deno.land/x/abc@v1.0.3/mod.ts';
+import type { Group } from 'https://deno.land/x/abc/mod.ts';
 
 import { renew } from '../controllers/jwt.ts';
 

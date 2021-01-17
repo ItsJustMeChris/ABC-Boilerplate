@@ -1,12 +1,6 @@
-import { validateJwt, JwtValidation } from "https://deno.land/x/djwt/validate.ts";
-import { HttpException } from "https://deno.land/x/abc@v1.0.3/http_exception.ts";
-import { Status } from "https://deno.land/std@0.65.0/http/http_status.ts";
-import { makeJwt, setExpiration, Jose, Payload } from "https://deno.land/x/djwt/create.ts";
-
-const header: Jose = {
-    alg: "HS256",
-    typ: "JWT",
-};
+import { verify, create, getNumericDate, Payload } from "https://deno.land/x/djwt/mod.ts";
+import { HttpException } from "https://deno.land/x/abc/http_exception.ts";
+import { Status } from "https://deno.land/std/http/http_status.ts";
 
 const secret: string | undefined = Deno.env.get('JWT_SECRET') || undefined;
 
@@ -15,21 +9,19 @@ if (!secret) {
 }
 
 const tryValidate = async (token: string) => {
-    const jwt: JwtValidation = await validateJwt({ jwt: token, key: secret, algorithm: "HS256" });
-    if (!jwt.isValid) {
-        if (jwt.isExpired) {
-            throw new HttpException("Login Time-out", Status.Forbidden);
+    try {
+        const jwt: Payload = await verify(token, secret, "HS512");
+        return jwt.payload;
+    } catch (error) {
+        if (error.message === 'The jwt is expired.') {
+            throw new HttpException("Login Time-out", Status.Gone);
         }
         throw new HttpException("Forbidden", Status.Forbidden);
-    } else {
-        return jwt.payload;
     }
 };
 
 const tryMake = async (data: any, exp: number = 300) => {
-    const payload: Payload = { ...data, exp: setExpiration(exp) };
-    const jwt = await makeJwt({ header, payload, key: secret });
-
+    const jwt = await create({ alg: "HS512", typ: "JWT" }, { exp: getNumericDate(exp), ...data }, secret)
     return jwt;
 }
 
