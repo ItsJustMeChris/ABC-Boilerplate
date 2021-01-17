@@ -49,7 +49,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/user/1",
+							"raw": "http://localhost:8080/user/1?token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTM1NTgyNzgsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJjaHJpcyJ9fQ.enTtEgZib2W0wkbEeg1wQGCga97F5T0kwNgR2CzZ63l3x8qIM7MdHFrhgxUWkGZGTsW1MnZDlJ-CPrYy9qSNbw",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -58,6 +58,12 @@
 							"path": [
 								"user",
 								"1"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTM1NTgyNzgsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJjaHJpcyJ9fQ.enTtEgZib2W0wkbEeg1wQGCga97F5T0kwNgR2CzZ63l3x8qIM7MdHFrhgxUWkGZGTsW1MnZDlJ-CPrYy9qSNbw"
+								}
 							]
 						}
 					},
@@ -98,9 +104,106 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
+		},
+		{
+			"name": "Token",
+			"item": [
+				{
+					"name": "Renew",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "renewKey",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTM1NTc0NTgsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJjaHJpcyJ9fQ.wTxl9R8ASwjY7DY2CKsp5a6r2Q0bujJJi1vRFH7RZXpiv_c4KCGj9MZ04FDTVH-fpiLaTq6j-YlQ7hWe17rrM",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/token/renew",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"token",
+								"renew"
+							],
+							"query": [
+								{
+									"key": "renewKey",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTM1NTc0NTgsInVzZXIiOnsiaWQiOjIsIm5hbWUiOiJjaHJpcyJ9fQ.wTxl9R8ASwjY7DY2CKsp5a6r2Q0bujJJi1vRFH7RZXpiv_c4KCGj9MZ04FDTVH-fpiLaTq6j-YlQ7hWe17rrMw",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blog Posts",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiY2hyaXMifSwiZXhwIjoxNjAxNDc2NzIzfQ.cQkbS1Vgv_4-2WqHNqO-XYE0zzB46JEOSzlzHgEv180",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "test 1234",
+									"type": "text"
+								},
+								{
+									"key": "slug",
+									"value": "test 1234",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "test 1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/blog-post/new",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"blog-post",
+								"new"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJjaHJpcyIsImlkIjoxfSwiZXhwIjoxNTk4Nzk2NTQyfQ.D4ZeKAL8hz9iPxie-FTYdCn2KjPd4AkYe4M410SHpmc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
