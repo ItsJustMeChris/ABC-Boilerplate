@@ -10,7 +10,7 @@ interface TokenBody {
 }
 
 export default (next: HandlerFunc): HandlerFunc => async (context: Context) => {
-    const { token } = await context.params;
+    const { token } = context.params;
     if (!token) {
         const { token } = await context.body as TokenBody;
         if (!token) {

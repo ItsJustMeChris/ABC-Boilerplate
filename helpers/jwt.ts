@@ -11,7 +11,7 @@ if (!secret) {
 const tryValidate = async (token: string) => {
     try {
         const jwt: Payload = await verify(token, secret, "HS512");
-        return jwt.payload;
+        return jwt;
     } catch (error) {
         if (error.message === 'The jwt is expired.') {
             throw new HttpException("Login Time-out", Status.Gone);
@@ -21,7 +21,18 @@ const tryValidate = async (token: string) => {
 };
 
 const tryMake = async (data: any, exp: number = 300) => {
-    const jwt = await create({ alg: "HS512", typ: "JWT" }, { exp: getNumericDate(exp), ...data }, secret)
+    const jwt = await create(
+        {
+            alg: "HS512",
+            typ: "JWT"
+        },
+        {
+            exp: getNumericDate(exp),
+            ...data
+
+        },
+        secret
+    )
     return jwt;
 }
 

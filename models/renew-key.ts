@@ -12,6 +12,11 @@ export default class RenewKey extends Model {
         userId: Relationships.belongsTo(User),
     };
 
+    id!: number;
+    key!: string;
+    ip!: string;
+    userId!: number;
+
     static user() {
         return this.hasOne(User);
     }

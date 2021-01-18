@@ -11,7 +11,18 @@ export default class User extends Model {
         password: { type: DataTypes.STRING, allowNull: false }
     };
 
+    id!: number;
+    name!: string;
+    password!: string;
+
     static renewKeys() {
         return this.hasMany(RenewKey);
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+        }
     }
 };
